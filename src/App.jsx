@@ -5,6 +5,7 @@ import Contacts from "./pages/Contacts";
 import HomeLayout from "./components/HomeLayout";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const routes = createBrowserRouter([
@@ -18,7 +19,7 @@ function App() {
         },
         {
           path: "settings",
-          element: <Settings />,
+          element: <ProtectedRoute><Settings /></ProtectedRoute>,
         },
         {
           path: "contacts",
