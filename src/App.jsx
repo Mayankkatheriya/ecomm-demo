@@ -1,0 +1,45 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Home from "./pages/Home";
+import Settings from "./pages/Settings";
+import Contacts from "./pages/Contacts";
+import HomeLayout from "./components/HomeLayout";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+
+function App() {
+  const routes = createBrowserRouter([
+    {
+      path: "/",
+      element: <HomeLayout />,
+      children: [
+        {
+          index: true,
+          element: <Home />,
+        },
+        {
+          path: "settings",
+          element: <Settings />,
+        },
+        {
+          path: "contacts",
+          element: <Contacts />,
+        },
+      ],
+    },
+    {
+      path: "/login",
+      element: <Login />,
+    },
+    {
+      path: "/signup",
+      element: <Signup />,
+    },
+  ]);
+  return (
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      <RouterProvider router={routes} />
+    </div>
+  );
+}
+
+export default App;
