@@ -5,7 +5,6 @@ const LoginPage = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
-    confirmPassword: "",
   });
 
   const handleChange = (e) => {
@@ -62,26 +61,6 @@ const LoginPage = () => {
               />
             </div>
           </div>
-
-          {/* Confirm Password */}
-          <div>
-            <label className="block text-gray-600 font-medium mb-1">
-              Confirm Password
-            </label>
-            <div className="relative">
-              <LockClosedIcon className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="password"
-                name="confirmPassword"
-                value={form.confirmPassword}
-                onChange={handleChange}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                placeholder="Confirm password"
-                required
-              />
-            </div>
-          </div>
-
           <button
             type="submit"
             className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 transition duration-200"
