@@ -1,21 +1,37 @@
 import React, { useState } from "react";
 import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 import AuthHeader from "../components/AuthHeader";
+import axiosInstance from "../utils/axios";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/slices/userSlice";
 
 const LoginPage = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your validation or API call logic here
-    console.log("Form submitted:", form);
+    //TODO: check validation here
+    try {
+      const response = await axiosInstance.post("/api/v1/user/login", form);
+      console.log(response.data);
+      dispatch(setUser({ name: "Mayank" }));
+      navigate("/");
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Login failed. Please try again."
+      );
+    }
   };
 
   return (
@@ -26,6 +42,11 @@ const LoginPage = () => {
           <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
             Login
           </h2>
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
+              {error}
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
             <div>

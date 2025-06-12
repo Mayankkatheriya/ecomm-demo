@@ -6,6 +6,7 @@ import HomeLayout from "./components/HomeLayout";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
+import RestrictedRoute from "./components/RestrictedRoute";
 
 function App() {
   const routes = createBrowserRouter([
@@ -18,22 +19,34 @@ function App() {
           element: <Home />,
         },
         {
-          path: "settings",
-          element: <ProtectedRoute><Settings /></ProtectedRoute>,
+          path: "/settings",
+          element: (
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          ),
         },
         {
-          path: "contacts",
+          path: "/contacts",
           element: <Contacts />,
         },
       ],
     },
     {
       path: "/login",
-      element: <Login />,
+      element: (
+        <RestrictedRoute>
+          <Login />
+        </RestrictedRoute>
+      ),
     },
     {
       path: "/signup",
-      element: <Signup />,
+      element: (
+        <RestrictedRoute>
+          <Signup />
+        </RestrictedRoute>
+      ),
     },
   ]);
   return (

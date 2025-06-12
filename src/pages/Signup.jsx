@@ -8,23 +8,28 @@ import {
   BuildingOfficeIcon,
 } from "@heroicons/react/24/outline";
 import AuthHeader from "../components/AuthHeader";
+import axiosInstance from "../utils/axios";
+import { useNavigate } from "react-router-dom";
+
+const initialFormData = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  mobNo: "",
+  password: "",
+  address: {
+    addressLine1: "",
+    addressLine2: "",
+    landmark: "",
+    city: "",
+    state: "",
+    pincode: "",
+  },
+};
 
 const SignupPage = () => {
-  const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    mobNo: "",
-    password: "",
-    address: {
-      addressLine1: "",
-      addressLine2: "",
-      landmark: "",
-      city: "",
-      state: "",
-      pincode: "",
-    },
-  });
+  const [form, setForm] = useState(initialFormData);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,9 +50,15 @@ const SignupPage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Signup Data:", form);
+    try {
+      const response = await axiosInstance.post("/api/v1/user/register", form);
+      console.log(response.data);
+      navigate("/login");
+    } catch (err) {
+      console.error("Error during signup:", err);
+    }
   };
 
   const inputClass =
