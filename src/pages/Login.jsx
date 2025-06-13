@@ -23,9 +23,13 @@ const LoginPage = () => {
     e.preventDefault();
     //TODO: check validation here
     try {
+
+      //Call login Api
       const response = await axiosInstance.post("/api/v1/user/login", form);
-      console.log(response.data);
+      //set user data in you redux/contextApi
       dispatch(setUser({ name: "Mayank" }));
+      //Store tokn to local storage 
+      localStorage.setItem("token", response.data.token);
       navigate("/");
     } catch (err) {
       setError(
