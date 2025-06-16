@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 import AuthHeader from "../components/AuthHeader";
 import axiosInstance from "../utils/axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/slices/userSlice";
 
@@ -14,6 +14,7 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -23,14 +24,16 @@ const LoginPage = () => {
     e.preventDefault();
     //TODO: check validation here
     try {
-
       //Call login Api
       const response = await axiosInstance.post("/api/v1/user/login", form);
+      const redirectPath = location.state?.from?.pathname || "/";
+      console.log("Redirecting to:", redirectPath);
+      navigate(redirectPath, { replace: true });
       //set user data in you redux/contextApi
-      dispatch(setUser({ name: "Mayank" }));
-      //Store tokn to local storage 
+      dispatch(setUser(response.data.user));
+      //Store tokn to local storage
       localStorage.setItem("token", response.data.token);
-      navigate("/");
+      console.log(location.state.from.pathname);
     } catch (err) {
       setError(
         err.response?.data?.message || "Login failed. Please try again."

@@ -34,11 +34,7 @@ function App() {
     },
     {
       path: "/login",
-      element: (
-        <RestrictedRoute>
-          <Login />
-        </RestrictedRoute>
-      ),
+      element: <Login />,
     },
     {
       path: "/signup",

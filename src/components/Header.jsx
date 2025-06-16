@@ -29,7 +29,9 @@ const Header = () => {
 
   const handleLogout = () => {
     setMenuOpen(false);
+    // cal logout API
     dispatch(setUser(null));
+    localStorage.removeItem("token");
   };
 
   return (
@@ -78,7 +80,7 @@ const Header = () => {
               >
                 <UserCircleIcon className="h-8 w-8 text-indigo-600 mr-2" />
                 <span className="text-gray-700 font-medium">
-                  {userDetails.name || "User"}
+                  {userDetails.firstName || "User"}
                 </span>
                 {/* Dropdown Menu */}
                 {menuOpen && (
