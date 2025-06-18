@@ -7,8 +7,30 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RestrictedRoute from "./components/RestrictedRoute";
+import { useEffect } from "react";
+import axiosInstance from "./utils/axios";
+import { useDispatch } from "react-redux";
+import { setUser } from "./store/slices/userSlice";
 
 function App() {
+  const dispatch = useDispatch();
+  // use auth Api here to verify the token and get user detail
+
+  const fetchUser = async () => {
+    try {
+      const response = await axiosInstance.get("/api/v1/auth");
+      if (response.data.user) {
+        dispatch(setUser(response.data.user));
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
   const routes = createBrowserRouter([
     {
       path: "/",
