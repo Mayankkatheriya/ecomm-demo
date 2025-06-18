@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../utils/axios";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProductData } from "../store/slices/productSlice";
 
 const formInitialState = {
   title: "",
@@ -15,21 +17,26 @@ const formInitialState = {
 };
 
 const Home = () => {
-  const [productData, setProductData] = useState([]);
+  // const [productData, setProductData] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState(formInitialState);
+  const { productData, loading, totalItems } = useSelector(
+    (store) => store.products
+  );
 
-  const fetchData = async () => {
-    try {
-      const response = await axiosInstance.get("/api/v1/product/list");
-      setProductData(response.data.results);
-      console.log(response.data);
-    } catch (err) {
-      console.log(err.message);
-    }
-  };
+  const pageSize = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+  const dispatch = useDispatch();
 
-  console.log(productData);
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await axiosInstance.get("/api/v1/product/list");
+  //     setProductData(response.data.results);
+  //     console.log(response.data);
+  //   } catch (err) {
+  //     console.log(err.message);
+  //   }
+  // };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -63,7 +70,8 @@ const Home = () => {
         formData
       );
       console.log("Created:", response.data);
-      fetchData(); // refresh the list
+      // fetchData(); // refresh the list
+      dispatch(fetchProductData({ pageNo: currentPage, pageSize: pageSize }));
       setFormData(formInitialState);
       setShowForm(false);
     } catch (err) {
@@ -72,8 +80,26 @@ const Home = () => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    // fetchData();
+
+    dispatch(fetchProductData({ pageNo: currentPage, pageSize: pageSize }));
+  }, [currentPage]);
+
+  const addToCart = async (id) => {
+    try {
+      const payload = {
+        productId: id,
+        qty: 1,
+      };
+      await axiosInstance.post("/api/v1/cart/add", payload);
+    } catch (err) {
+      console.log(err.messgae);
+    }
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex-1 bg-gray-50">
@@ -229,12 +255,49 @@ const Home = () => {
                             />
                           ))}
                         </div>
+                        <button
+                          className="text-center outline-none bg-blue-600 text-white mt-2 w-full p-2 cursor-pointer"
+                          onClick={() => addToCart(product._id)}
+                        >
+                          Add To Cart
+                        </button>
                       </div>
                     )}
                   </div>
                 </div>
               ))}
             </div>
+          </div>
+        )}
+        {productData.length > 0 && (
+          <div className="flex justify-center mt-10 space-x-2">
+            <button
+              onClick={() => {
+                if (currentPage > 1) {
+                  setCurrentPage((prev) => prev - 1);
+                }
+              }}
+              disabled={currentPage === 1}
+              className={`px-4 py-2 rounded border ${
+                currentPage === 1
+                  ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  : "bg-white text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              Previous
+            </button>
+
+            <span className="px-4 py-2 border rounded text-gray-700">
+              Page {currentPage}
+            </span>
+
+            <button
+              onClick={() => setCurrentPage((prev) => prev + 1)}
+              className="px-4 py-2 rounded border bg-white text-gray-700 hover:bg-gray-100"
+              disabled={currentPage * pageSize >= totalItems}
+            >
+              Next
+            </button>
           </div>
         )}
       </div>
