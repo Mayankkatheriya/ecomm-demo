@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import axiosInstance from "./utils/axios";
 import { useDispatch } from "react-redux";
 import { setUser } from "./store/slices/userSlice";
+import Cart from "./pages/Cart";
 
 function App() {
   const dispatch = useDispatch();
@@ -47,6 +48,10 @@ function App() {
               <Settings />
             </ProtectedRoute>
           ),
+        },
+        {
+          path: "/cart",
+          element: <Cart />,
         },
         {
           path: "/contacts",

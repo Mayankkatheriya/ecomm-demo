@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../utils/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductData } from "../store/slices/productSlice";
+import { fetchCartData } from "../store/slices/cartSlice";
 
 const formInitialState = {
   title: "",
@@ -92,6 +93,7 @@ const Home = () => {
         qty: 1,
       };
       await axiosInstance.post("/api/v1/cart/add", payload);
+      dispatch(fetchCartData());
     } catch (err) {
       console.log(err.messgae);
     }

@@ -17,6 +17,8 @@ const initialFormData = {
   email: "",
   mobNo: "",
   password: "",
+  role: "CUSTOMER",
+  gender: "M",
   address: {
     addressLine1: "",
     addressLine2: "",
@@ -258,6 +260,39 @@ const SignupPage = () => {
                     placeholder="10001"
                     required
                   />
+                </div>
+              </div>
+              <div>
+                <label className={labelClass}>Role</label>
+                <div className="relative">
+                  <select
+                    name="role"
+                    value={form.role}
+                    onChange={handleChange}
+                    className={inputClass}
+                    required
+                  >
+                    <option value="CUSTOMER">Customer</option>
+                    <option value="SELLER">Seller</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Gender */}
+              <div>
+                <label className={labelClass}>Gender</label>
+                <div className="relative">
+                  <select
+                    name="gender"
+                    value={form.gender}
+                    onChange={handleChange}
+                    className={inputClass}
+                    required
+                  >
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                    <option value="O">Other</option>
+                  </select>
                 </div>
               </div>
             </div>
